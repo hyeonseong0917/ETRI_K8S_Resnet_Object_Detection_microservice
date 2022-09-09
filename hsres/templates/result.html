@@ -1,0 +1,27 @@
+<a href="http://129.254.202.111:30111/upload">back to home</a>
+<button onClick="window.location.reload()">refresh</button>
+{% for item in result_DB %}
+    <p> 
+        your pod is : <b>{{item["CURPOD"]}}</b>,<br>
+        your id is : <b>{{item["_id"]}}</b>,<br>
+        your item is : <b>{{ item["FILENAME"] }}</b>,<br>
+        Target diretory is : <b>{{ item['DIR']}}</b>,<br>
+        File status is : <b>{{ item["STATUS"]}}</b>,<br>
+        Process starttime is : <b>{{ item["STARTTIME"]}}</b>,<br>
+        avi to mp4 start time is : <b>{{item["AVITOMP4_START_TIME"]}}</b>,<br>
+        avi to mp4 end time is : <b>{{item["AVITOMP4_END_TIME"]}}</b>,<br>
+        mp4 to mp3 start time is : <b>{{item["MP4TOMP3_START_TIME"]}}</b>,<br>
+        mp4 to mp3 end time is : <b>{{item["MP4TOMP3_END_TIME"]}}</b>,<br>
+        Total duration time is : <b>{{item["PERIOD"]}}</b>,<br>
+
+        {% if item['STATUS']=="Complete_MP3" %}
+            <a href="/{{item['_id']}}/download">{{item["FILENAME"][:-4]}}.mp3</a>
+        {% endif %}
+        <br>
+        {% if item['STATUS']=="Deleted" %}
+            <a href="/{{item['_id']}}/delete">{{item["_id"]}} delete</a>
+        {% endif %}
+        <br>
+        <br>
+    </p>
+{% endfor %}
