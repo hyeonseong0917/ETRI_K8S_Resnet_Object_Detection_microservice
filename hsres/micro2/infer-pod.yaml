@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hs-infer
+spec:
+  containers:
+  - name: hs-infer
+    ports:
+    - containerPort: 5000  
+    image: hyeonseong0917/hs_infer:latest
+    resources:
+      limits:
+        nvidia.com/gpu: 1
+    volumeMounts:
+    - name: nfs-volume
+      mountPath: /mnt
+  nodeSelector:
+    node: c3wnode2      
+          
+  volumes:
+  - name: nfs-volume
+    persistentVolumeClaim:
+      claimName: hyeonseong-nfs-pvc

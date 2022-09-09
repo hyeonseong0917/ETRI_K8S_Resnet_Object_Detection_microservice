@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hs-infer-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hs-infer
+  template:
+    metadata:
+      name: hs-infer-deploy
+      labels:
+        app: hs-infer
+    spec:
+      containers:
+      - name: hs-infer-deploy
+        ports:
+        - containerPort: 5000  
+        image: hyeonseong0917/hs_infer:latest
+        # image: python
+        volumeMounts:
+        - name: nfs-volume
+          mountPath: /mnt
+      nodeSelector:
+        node: c3wnode2         
+          
+      volumes:
+      - name: nfs-volume
+        persistentVolumeClaim:
+          claimName: hyeonseong-nfs-pvc
+
+# ---
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: hyeonseong-nfs-pv
+# spec:
+#   capacity:
+#     storage: 2Gi
+#   volumeMode: Filesystem
+#   accessModes:
+#     - ReadWriteOnce
+#   persistentVolumeReclaimPolicy: Recycle
+#   mountOptions:
+#     - hard
+#   nfs:
+#     path: /var/nfs/general/
+#     server: 129.254.202.111
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: hyeonseong-nfs-pvc
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 2Gi
+
+# ---
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   name: hs-req
+#   labels:
+#     app: hyeonseong-req
+# spec:
+#   containers:
+#   - name: hs-nfs-mount-container
+#     ports:
+#     - containerPort: 5000  
+#     image: hyeonseong0917/hsr:latest
+#     # image: python
+#     volumeMounts:
+#     - name: nfs-volume
+#       mountPath: /mnt
+          
+#   volumes:
+#   - name: nfs-volume
+#     persistentVolumeClaim:
+#       claimName: hyeonseong-nfs-pvc
+
+# ---
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   name: hsreq
+# spec:
+#   containers:
+#   - name: reqcontainer
+#     image: hyeonseong0917/hsr
+#     ports:
+#     - containerPort: 5000
+#     volumeMounts:
+#     - name: nfs-volume-hs
+#       mountPath: /mnt
+#   volumes:
+#   - name: nfs-volume-hs
+#     persistentVolumeClaim:
+#       claimName: hs-nfs-pvc 
