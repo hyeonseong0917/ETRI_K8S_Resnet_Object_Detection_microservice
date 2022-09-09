@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hs-res-svc
+spec:
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+    nodePort: 30232
+  selector:
+    app: hs-pre                    
